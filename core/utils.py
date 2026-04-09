@@ -2,25 +2,14 @@ import ssl, requests, time
 from typing import Dict, Any, Optional, List
 from requests.adapters import HTTPAdapter
 from urllib3.util.retry import Retry
-from urllib3.util.ssl_ import create_urllib3_context
 from fastapi import HTTPException
 
 from core.config import TMDB_API_KEY, TMDB_BASE, TMDB_IMG_500
 from core.models import TMDBMovieCard, TMDBMovieDetails
 
-class TLS12Adapter(HTTPAdapter):
-    """Forces TLS 1.2 to bypass Windows UNEXPECTED_EOF_WHILE_READING SSLError."""
-    def init_poolmanager(self, *args, **kwargs):
-        ctx = create_urllib3_context()
-        ctx.options |= ssl.OP_NO_TLSv1_3
-        ctx.check_hostname = False
-        ctx.verify_mode = ssl.CERT_NONE
-        kwargs["ssl_context"] = ctx
-        super().init_poolmanager(*args, **kwargs)
-
 _TMDB_RETRY = Retry(total=5, backoff_factor=0.5, status_forcelist=[500, 502, 503, 504], allowed_methods=["GET"])
 _TMDB_SESSION = requests.Session()
-_TMDB_SESSION.mount("https://", TLS12Adapter(max_retries=_TMDB_RETRY))
+_TMDB_SESSION.mount("https://", HTTPAdapter(max_retries=_TMDB_RETRY))
 
 def _norm_title(t: str) -> str:
     return str(t).strip().lower()
