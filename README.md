@@ -8,6 +8,8 @@ app_port: 7860
 ---
 # 🎬 Movie Match Maker
 
+🚀 **Live Demo:** [https://huggingface.co/spaces/Divya499/Movie-Match-Maker](https://huggingface.co/spaces/Divya499/Movie-Match-Maker)
+
 **Movie Match Maker** is a premium, AI-powered film discovery platform that blends traditional data-driven recommendations with cutting-edge LLM reasoning. Whether you're looking for a specific hidden gem or just want to chat about cinema, Movie Match Maker is your ultimate film companion.
 
 ---
